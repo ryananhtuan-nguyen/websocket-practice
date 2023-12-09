@@ -4,16 +4,12 @@ import NotificationsContainer from '@/components/NotificationContainer'
 
 const Home: React.FC = () => {
   const [token, setToken] = useState<string | null>(null)
-  const BASE_URL = 'https://notifications-server.fly.dev'
-  const WEBSOCKET_BASE_URL = 'wss://notifications-server.fly.dev'
-  const HIRING_SECRET = 'm4v3H34l7H-5JJW'
 
   useEffect(() => {
-    // Fetch the token using the hiring secret
     const fetchToken = async () => {
       try {
         const response = await fetch(
-          `${BASE_URL}/api/token?hiring_secret=${HIRING_SECRET}`
+          `${process.env.BASE_URL}/api/token?hiring_secret=${process.env.HIRING_SECRET}`
         )
         const data = await response.json()
 
@@ -29,15 +25,9 @@ const Home: React.FC = () => {
     }
 
     fetchToken()
-  }, [HIRING_SECRET, BASE_URL, token])
+  }, [token])
 
-  return (
-    <div>
-      {token && (
-        <NotificationsContainer url={WEBSOCKET_BASE_URL} token={token} />
-      )}
-    </div>
-  )
+  return <div>{token && <NotificationsContainer token={token} />}</div>
 }
 
 export default Home
